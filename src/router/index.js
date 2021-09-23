@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Dasboard from '../views/Dashboard.vue'
 import Login from '@/views/Login'
-//import store from '@/store'
+import SignIn from '@/views/SignIn'
+
+import { store } from '@/store'
 
 Vue.use(VueRouter)
 
@@ -11,6 +13,14 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login,
+    meta: {
+      publica: true
+    }
+  },
+  {
+    path: '/sign-in',
+    name: 'sign-in',
+    component: SignIn,
     meta: {
       publica: true
     }
@@ -43,7 +53,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach( (routeTo, routeFrom, next) => {
-  if(!routeTo.meta.publica /*&& !store.state.token*/){
+  if(!routeTo.meta.publica && !store.state.token){
     return next({ name: 'login'});
   }
   next();

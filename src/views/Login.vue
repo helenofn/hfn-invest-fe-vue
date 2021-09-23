@@ -17,7 +17,7 @@
                         v-model="usuario.email"
                         :rules="[rules.required, rules.email]"
                         counter
-                        maxlength="50"
+                        maxlength="150"
                         hint="É a sua chave de acesso"
                         label="E-mail"
                     ></v-text-field>
@@ -42,12 +42,19 @@
     <v-divider class="mx-4"></v-divider>
 
     <v-card-actions>
-      <v-btn block
+      <v-btn
         color="deep-purple lighten-2"
         text
-        @click="reserve"
+        @click="entrar"
       >
         Entrar
+      </v-btn>
+      <v-btn
+        color="deep-purple lighten-2"
+        text
+        @click="singin"
+      >
+        Sign In
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -71,10 +78,13 @@
     }),
 
     methods: {
-      reserve () {
+      entrar () {
         this.loading = true
         setTimeout(() => (this.loading = false), 2000)
       },
+      singin(){
+        this.$router.push({name:'sign-in'});
+      }
     },
   }
 </script>
