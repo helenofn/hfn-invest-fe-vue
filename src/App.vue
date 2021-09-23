@@ -1,18 +1,35 @@
-<template>
+ <template>
   <v-app>
-    <BarraNavegacaoTopo></BarraNavegacaoTopo>
+
+    <BarraDrawer v-if="usuarioEstaLogado"></BarraDrawer>
+
+    <!-- Sizes your content based upon application components -->
     <v-main>
-      <router-view />
+
+      <!-- Provides the application the proper gutter -->
+      <v-container fluid>
+
+        <!-- If using vue-router -->
+        <router-view></router-view>
+      </v-container>
     </v-main>
+
+    <v-footer app>
+      <!-- -->
+    </v-footer>
   </v-app>
 </template>
 
 <script>
-import BarraNavegacaoTopo from '@/components/BarraNavegacaoTopo/BarraNavegacaoTopo'
+import BarraDrawer from '@/components/barraNavegacao/BarraDrawer';
+import { mapGetters } from 'vuex'
 
 export default{
   components:{
-    BarraNavegacaoTopo
+    BarraDrawer
+  },
+  computed:{
+      ...mapGetters(['usuarioEstaLogado'])
   }
 }
 </script>
