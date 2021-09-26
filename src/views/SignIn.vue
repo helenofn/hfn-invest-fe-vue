@@ -15,7 +15,7 @@
             <v-row>
                 <v-col cols="6" md="6">
                     <v-text-field
-                        v-model="usuario.nome"
+                        v-model="usuario.name"
                         :rules="[rules.required, rules.nomeMin]"
                         counter
                         maxlength="70"
@@ -35,7 +35,7 @@
                 </v-col>
                 <v-col cols="6" md="6">
                     <v-text-field
-                        v-model="usuario.senha"
+                        v-model="usuario.password"
                         :append-icon="showSenha ? 'mdi-eye' : 'mdi-eye-off'"
                         :rules="[rules.required, rules.senhaMin, rules.senhaMax]"
                         :type="showSenha ? 'text' : 'password'"
@@ -48,7 +48,7 @@
                 </v-col>
                 <v-col cols="6" md="6">
                     <v-text-field
-                        v-model="usuario.confirmaSenha"
+                        v-model="usuario.passwordConfirm"
                         :append-icon="showSenha ? 'mdi-eye' : 'mdi-eye-off'"
                         :rules="[rules.required, rules.senhaMin, rules.senhaMax, ruleSenhaMatch]"
                         :type="showSenha ? 'text' : 'password'"
@@ -78,9 +78,9 @@
       <v-btn 
         color="deep-purple lighten-2"
         text
-        @click="logar"
+        @click="redirecionarLogar"
       >
-        Login
+        Ir para Login
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -92,10 +92,10 @@
     data: () => ({
         valid: false,
         usuario:{
-            nome: '',
+            name: '',
             email:'',
-            senha:'',
-            confirmaSenha: ''
+            password:'',
+            passwordConfirm: ''
         },
         loading: false,
         showSenha: false,
@@ -111,15 +111,21 @@
     methods: {
       salvar () {
         if(this.$refs.form.validate()){
-            this.loading = true
-            setTimeout(() => (this.loading = false), 2000)
+            this.loading = true;
+            setTimeout(() => (this.loading = false), 2000);
+            this.$http.post('user',this.usuario)
+                .then(resposta => {
+                    console.log(resposta);
+                    this.$router.push({name: 'login'});
+                })
+                .catch(error => console.log(error));
         }
       },
-      logar(){
+      redirecionarLogar(){
           this.$router.push({name:'login'});
       },
       ruleSenhaMatch(){
-          return this.usuario.senha == this.usuario.confirmaSenha || 'Senha e confirmação estão diferentes'
+          return this.usuario.password == this.usuario.passwordConfirm || 'Senha e confirmação estão diferentes'
       }
     },
   }
