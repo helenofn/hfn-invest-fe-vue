@@ -22,4 +22,23 @@ http.interceptors.request.use(
     }
 );
 
+http.interceptors.response.use(
+    function(response){
+        console.log("Response: "+response);
+        return response;
+    },
+    function(error){
+        const erro = {
+            error,
+            msgErro:'Ocorreu um imprevisto. Favor tentar mais tarde.'
+        }
+        if(error&&error.response&&error.response.data){
+            if(error.response.data.showMessage){
+                erro.msgErro = error.response.data.dsBusinessErroMessage
+            }
+        }
+        return Promise.reject(erro);
+    }
+);
+
 export default http;

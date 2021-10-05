@@ -92,10 +92,10 @@
     data: () => ({
         valid: false,
         usuario:{
-            name: '',
-            email:'',
-            password:'',
-            passwordConfirm: ''
+            name: 'Heleno Freitas Neto',
+            email:'heleno.freitas@gmail.com',
+            password:'12345678',
+            passwordConfirm: '12345678'
         },
         loading: false,
         showSenha: false,
@@ -113,12 +113,15 @@
         if(this.$refs.form.validate()){
             this.loading = true;
             setTimeout(() => (this.loading = false), 2000);
-            this.$http.post('user',this.usuario)
-                .then(resposta => {
-                    console.log(resposta);
+            this.$http.post('auth/signIn',this.usuario)
+                .then(response => {
+                    console.log(response);
+                    this.$swal('Sucesso!','O seu usuário foi criado!','success');
                     this.$router.push({name: 'login'});
                 })
-                .catch(error => console.log(error));
+                .catch(error => {
+                  this.$swal('Ops!',error.msgErro,'error');
+                });
         }
       },
       redirecionarLogar(){
