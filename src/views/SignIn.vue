@@ -114,8 +114,7 @@
             this.loading = true;
             setTimeout(() => (this.loading = false), 2000);
             this.$http.post('auth/signIn',this.usuario)
-                .then(response => {
-                    console.log(response);
+                .then(() => {
                     this.$swal('Sucesso!','O seu usuário foi criado!','success');
                     this.$router.push({name: 'login'});
                 })

@@ -43,6 +43,17 @@ const routes = [
     meta: {
       publica: false
     }
+  },
+  {
+    path: '/cadastro-usuario',
+    name: 'cadastroUsuario',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/usuario/CadastroUsuario.vue'),
+    meta: {
+      publica: false
+    }
   }
 ]
 
@@ -53,7 +64,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach( (routeTo, routeFrom, next) => {
-  if(!routeTo.meta.publica && !store.state.token){
+  if(!routeTo.meta.publica && !store.state.auth.token){
     return next({ name: 'login'});
   }
   next();

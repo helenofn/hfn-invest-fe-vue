@@ -1,3 +1,5 @@
+import http from '@/http';
+
 const estado = {
     token: null,
     usuario: {}
@@ -14,6 +16,26 @@ const mutations = {
     }
 }
 
+const actions = {
+    efetuarLogin({ commit }, usuario){
+        return new Promise((resolve, reject) => {
+            http.post('auth/logIn', usuario)
+                .then(response => {
+                    commit('DEFINIR_USUARIO_LOGADO', {
+                        token: response.data.token,
+                        usuario: response.data.user
+                    });
+                    resolve(response.data);
+                })
+                .catch(err =>{
+                    console.log('Erro: ');
+                    console.log(err);
+                    reject(err);
+                });
+        });
+    }
+}
+
 const getters = {
     usuarioEstaLogado: state => Boolean(state.token)
 }
@@ -21,5 +43,6 @@ const getters = {
 export default {
     state: estado,
     mutations: mutations,
-    getters: getters
+    getters: getters,
+    actions: actions
 };
