@@ -1,4 +1,5 @@
 <template>
+<div>
     <v-card
         :loading="loading"
         class="mx-auto my-12"
@@ -47,23 +48,33 @@
         text
         @click="entrar"
         :disabled="!valid"
-      >
-        Entrar
-      </v-btn>
+      >Entrar</v-btn>
       <v-btn
         color="deep-purple lighten-2"
         text
-        @click="singin"
-      >
-        Sign In
-      </v-btn>
+        @click="siginDialog.value = true"
+      >Sign In</v-btn>
     </v-card-actions>
   </v-card>
+
+  <v-dialog
+        v-model="siginDialog.value"
+        transition="dialog-bottom-transition"
+        max-width="1000"
+  >
+    <Usuario :is-dialog="true" :dialog="siginDialog" tipo="signin"></Usuario>
+  </v-dialog>
+</div>
 </template>
 
 <script>
+import Usuario from '@/components/usuario/Usuario.vue'
+
   export default {
     data: () => ({
+        siginDialog: {
+          value: false
+        },
         valid: false,
         usuario:{
             username:'heleno.freitas@gmail.com',
@@ -75,8 +86,12 @@
             required: value => !!value || 'Obrigatório.',
             min: v => v.length >= 8 || 'Min 8 characters',
             email: v => /.+@.+/.test(v) || 'Informe um e-mail válido'
-        },
+        }
     }),
+
+    components:{
+      Usuario
+    },
 
     methods: {
       entrar () {
@@ -90,9 +105,6 @@
                 .catch(error => {
                     this.$swal('Ops!',error.msgErro,'error');
                 });
-      },
-      singin(){
-        this.$router.push({name:'sign-in'});
       }
     },
   }

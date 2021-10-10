@@ -2,11 +2,11 @@
 <div>
     <v-card
         :loading="loading"
-        class="mx-auto my-12"
+        class="mx-auto"
         max-width="1000"
     >
 
-    <v-card-title>Sign In</v-card-title>
+    <v-card-title>{{title}}</v-card-title>
     <v-divider class="mx-4"></v-divider>
     <v-card-text>
       
@@ -34,7 +34,7 @@
                     ></v-text-field>
                 </v-col>
                 <v-col cols="6" md="6">
-                    <v-text-field
+                    <v-text-field v-if="isSignIn"
                         v-model="usuario.password"
                         :append-icon="showSenha ? 'mdi-eye' : 'mdi-eye-off'"
                         :rules="[rules.required, rules.senhaMin, rules.senhaMax]"
@@ -47,7 +47,7 @@
                     ></v-text-field>
                 </v-col>
                 <v-col cols="6" md="6">
-                    <v-text-field
+                    <v-text-field v-if="isSignIn"
                         v-model="usuario.passwordConfirm"
                         :append-icon="showSenha ? 'mdi-eye' : 'mdi-eye-off'"
                         :rules="[rules.required, rules.senhaMin, rules.senhaMax, ruleSenhaMatch]"
@@ -75,12 +75,19 @@
       >
         Salvar
       </v-btn>
-      <v-btn 
+      <v-btn v-if="!isDialog && isSignIn"
         color="deep-purple lighten-2"
         text
         @click="redirecionarLogar"
       >
         Ir para Login
+      </v-btn>
+      <v-btn v-if="isDialog"
+        color="deep-purple lighten-2"
+        text
+        @click="dialog.value = false"
+      >
+        Fechar
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -88,8 +95,17 @@
 </template>
 
 <script>
-  export default {
+import { create as createUser } from '@/services/userService.js';
+export default{
+    props:{
+        tipo: String,
+        isDialog: Boolean,
+        dialog: Object,
+        pUsuario: Object
+    },
     data: () => ({
+        title:'',
+        isSignIn: false,
         valid: false,
         usuario:{
             name: 'Heleno Freitas Neto',
@@ -108,15 +124,41 @@
         },
     }),
 
+    created(){
+       //this.usuario = Object.assign({}, this.pUsuario);
+       if(this.pUsuario){
+         this.usuario = this.pUsuario; 
+       }
+      
+        if(this.tipo=='signin'){
+            this.title='Sign In';
+            this.isSignIn = true;
+        }else{
+            this.title='Alterar Usuário';
+            this.isSignIn = false;
+        }
+    },
+
+    watch: { 
+      pUsuario: function(newVal) {
+        this.usuario = newVal;
+      }
+    },
+
     methods: {
       salvar () {
         if(this.$refs.form.validate()){
             this.loading = true;
             setTimeout(() => (this.loading = false), 2000);
-            this.$http.post('auth/signIn',this.usuario)
+            //this.$http.post('auth/signIn',this.usuario)
+            createUser(this.usuario)
                 .then(() => {
                     this.$swal('Sucesso!','O seu usuário foi criado!','success');
-                    this.$router.push({name: 'login'});
+                    if(this.isSignIn){
+                      this.dialog.value = false;
+                    }else{
+                      this.$router.push({name: 'login'});
+                    }
                 })
                 .catch(error => {
                   this.$swal('Ops!',error.msgErro,'error');
