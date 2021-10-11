@@ -60,12 +60,13 @@
 <script>
 import Usuario from '@/components/usuario/Usuario.vue'
 import { getAll as getAllUsers } from '@/services/userService.js';
+import { usuario } from '@/model/usuario.js';
   export default {
     components:{
         Usuario
     },
     data: () => ({
-      usuario:null,
+      usuario:usuario,
       search: '',
       dialog: {
             value:false

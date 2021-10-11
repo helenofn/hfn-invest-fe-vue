@@ -3,7 +3,6 @@
     <v-card
         :loading="loading"
         class="mx-auto"
-        max-width="1000"
     >
 
     <v-card-title>{{title}}</v-card-title>
@@ -13,7 +12,7 @@
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-container>
             <v-row>
-                <v-col cols="6" md="6">
+                <v-col cols="12" md="12">
                     <v-text-field
                         v-model="usuario.name"
                         :rules="[rules.required, rules.nomeMin]"
@@ -23,7 +22,7 @@
                         label="Nome Completo"
                     ></v-text-field>
                 </v-col>
-                <v-col cols="6" md="6">
+                <v-col cols="12" md="12">
                     <v-text-field
                         v-model="usuario.email"
                         :rules="[rules.required, rules.email]"
@@ -33,8 +32,8 @@
                         label="E-mail"
                     ></v-text-field>
                 </v-col>
-                <v-col cols="6" md="6">
-                    <v-text-field v-if="isSignIn"
+                <v-col cols="12" md="12" v-if="isSignIn">
+                    <v-text-field
                         v-model="usuario.password"
                         :append-icon="showSenha ? 'mdi-eye' : 'mdi-eye-off'"
                         :rules="[rules.required, rules.senhaMin, rules.senhaMax]"
@@ -46,18 +45,30 @@
                         @click:append="showSenha = !showSenha"
                     ></v-text-field>
                 </v-col>
-                <v-col cols="6" md="6">
-                    <v-text-field v-if="isSignIn"
-                        v-model="usuario.passwordConfirm"
+                <v-col cols="12" md="12" v-if="isSignIn">
+                    <v-text-field
+                        v-model="passwordConfirm"
                         :append-icon="showSenha ? 'mdi-eye' : 'mdi-eye-off'"
                         :rules="[rules.required, rules.senhaMin, rules.senhaMax, ruleSenhaMatch]"
                         :type="showSenha ? 'text' : 'password'"
-                        name="senha"
-                        label="Senha"
+                        name="senhaConfirm"
+                        label="Confirmar Senha"
                         hint=""
                         counter
                         @click:append="showSenha = !showSenha"
                     ></v-text-field>
+                </v-col>
+                
+                <v-col cols="12" md="12" v-if="!isSignIn">
+                    <v-combobox
+                      v-model="usuario.status"
+                      :items="userStatusList"
+                      label="Situação"
+                      item-text="name"
+                      return-object
+                    >
+                    
+                    </v-combobox>
                 </v-col>
             </v-row>
         </v-container>
@@ -68,10 +79,17 @@
     <v-divider class="mx-4"></v-divider>
 
     <v-card-actions>
-      <v-btn 
+      <v-btn v-if="isSignIn"
         color="deep-purple lighten-2"
         text
         @click="salvar"
+      >
+        Salvar
+      </v-btn>
+      <v-btn v-if="!isSignIn"
+        color="deep-purple lighten-2"
+        text
+        @click="alterar"
       >
         Salvar
       </v-btn>
@@ -95,7 +113,9 @@
 </template>
 
 <script>
-import { create as createUser } from '@/services/userService.js';
+import { create as createUser, update as updateUser } from '@/services/userService.js';
+import { statusUserListAll } from '@/services/dominioService.js';
+import { usuario } from '@/model/usuario.js';
 export default{
     props:{
         tipo: String,
@@ -107,12 +127,8 @@ export default{
         title:'',
         isSignIn: false,
         valid: false,
-        usuario:{
-            name: 'Heleno Freitas Neto',
-            email:'heleno.freitas@gmail.com',
-            password:'12345678',
-            passwordConfirm: '12345678'
-        },
+        usuario:usuario,
+        passwordConfirm:'',
         loading: false,
         showSenha: false,
         rules: {
@@ -122,12 +138,19 @@ export default{
             senhaMax: v => v.length <= 16 || 'Max 16 caracteres',
             email: v => /.+@.+/.test(v) || 'Informe um e-mail válido'
         },
+        userStatusList:[
+          'Ativo',
+          'Inativo'
+        ]
     }),
 
     created(){
-       //this.usuario = Object.assign({}, this.pUsuario);
+      this.listarStatusUser();
+
        if(this.pUsuario){
-         this.usuario = this.pUsuario; 
+         console.log(this.pUsuario);
+         this.usuario = this.pUsuario;
+         this.usuario = Object.assign({}, this.pUsuario);
        }
       
         if(this.tipo=='signin'){
@@ -146,6 +169,15 @@ export default{
     },
 
     methods: {
+      listarStatusUser(){
+        statusUserListAll()
+        .then((response)=>{
+          console.log(response.data);
+          this.userStatusList = response.data;
+        }).catch(error => {
+          console.log(error);
+        });
+      },
       salvar () {
         if(this.$refs.form.validate()){
             this.loading = true;
@@ -154,10 +186,27 @@ export default{
             createUser(this.usuario)
                 .then(() => {
                     this.$swal('Sucesso!','O seu usuário foi criado!','success');
-                    if(this.isSignIn){
+                    if(this.isDialog){
                       this.dialog.value = false;
                     }else{
                       this.$router.push({name: 'login'});
+                    }
+                })
+                .catch(error => {
+                  this.$swal('Ops!',error.msgErro,'error');
+                });
+        }
+      },
+      alterar(){
+        if(this.$refs.form.validate()){
+            this.loading = true;
+            setTimeout(() => (this.loading = false), 2000);
+            //this.$http.post('auth/signIn',this.usuario)
+            updateUser(this.usuario)
+                .then(() => {
+                    this.$swal('Sucesso!','O seu usuário foi alterado!','success');
+                    if(this.isDialog){
+                      this.dialog.value = false;
                     }
                 })
                 .catch(error => {
@@ -169,7 +218,7 @@ export default{
           this.$router.push({name:'login'});
       },
       ruleSenhaMatch(){
-          return this.usuario.password == this.usuario.passwordConfirm || 'Senha e confirmação estão diferentes'
+          return this.usuario.password == this.passwordConfirm || 'Senha e confirmação estão diferentes'
       }
     },
   }

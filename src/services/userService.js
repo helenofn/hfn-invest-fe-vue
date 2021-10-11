@@ -5,7 +5,7 @@ export const create = (usuario) => {
 };
 
 export const update = (usuario) => {
-    return Http.update('user', usuario);
+    return Http.put('user/' + usuario.id, usuario);
 }
 
 export const getAll = () => {

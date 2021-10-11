@@ -60,7 +60,7 @@
   <v-dialog
         v-model="siginDialog.value"
         transition="dialog-bottom-transition"
-        max-width="1000"
+        max-width="500"
   >
     <Usuario :is-dialog="true" :dialog="siginDialog" tipo="signin"></Usuario>
   </v-dialog>

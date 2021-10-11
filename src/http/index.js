@@ -24,7 +24,7 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
     function(response){
-        console.log("Response: "+response);
+        //console.log("Response: "+response);
         return response;
     },
     function(error){
