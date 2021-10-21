@@ -11,6 +11,7 @@ const http = axios.create({
 
 http.interceptors.request.use(
     function(config){
+        console.log(config);
         const token = store.state.token;
         if(token){
             config.headers.Authorization = `Bearer ${token}`;
@@ -24,10 +25,10 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
     function(response){
-        //console.log("Response: "+response);
         return response;
     },
     function(error){
+        console.log(error);
         const erro = {
             error,
             msgErro:'Ocorreu um imprevisto. Favor tentar mais tarde.'

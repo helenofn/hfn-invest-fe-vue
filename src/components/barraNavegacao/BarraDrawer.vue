@@ -1,9 +1,13 @@
 <template>
-    <v-navigation-drawer app permanent>
+    <v-navigation-drawer app temporary stateless :value="getMenuIsOpen">
         <v-list-item>
             <v-list-item-content>
             <v-list-item-title class="text-h6">
                 LULEKE Invest
+                <v-icon class="float-right" 
+                    @click.stop="closeMenu">
+                    mdi-window-close
+                </v-icon>
             </v-list-item-title>
             <v-list-item-subtitle>
                 {{usuario.name}}
@@ -80,6 +84,7 @@
 
 <script>
 import { store } from '@/store'
+import { mapGetters } from 'vuex'
 
   export default {
     data () {
@@ -100,9 +105,16 @@ import { store } from '@/store'
         usuario: store.state.auth.usuario
       }
     },
+    computed:{
+      ...mapGetters(['getMenuIsOpen'])
+    },
     methods:{
         direcionarPagina(routeName){
+            this.closeMenu();
             this.$router.push({ name: routeName });
+        },
+        closeMenu(){
+            this.$store.dispatch('menuToogle', false);
         }
     },
     created: function () {

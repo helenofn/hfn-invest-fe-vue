@@ -62,7 +62,7 @@
         transition="dialog-bottom-transition"
         max-width="500"
   >
-    <Usuario :is-dialog="true" :dialog="siginDialog" tipo="signin"></Usuario>
+    <Usuario :p-is-dialog="true" :p-dialog="siginDialog" p-tipo="signin"></Usuario>
   </v-dialog>
 </div>
 </template>

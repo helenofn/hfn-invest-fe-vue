@@ -93,17 +93,17 @@
       >
         Salvar
       </v-btn>
-      <v-btn v-if="!isDialog && isSignIn"
+      <v-btn v-if="!pIsDialog && isSignIn"
         color="deep-purple lighten-2"
         text
         @click="redirecionarLogar"
       >
         Ir para Login
       </v-btn>
-      <v-btn v-if="isDialog"
+      <v-btn v-if="pIsDialog"
         color="deep-purple lighten-2"
         text
-        @click="dialog.value = false"
+        @click="pDialog.value = false"
       >
         Fechar
       </v-btn>
@@ -115,19 +115,19 @@
 <script>
 import { create as createUser, update as updateUser } from '@/services/userService.js';
 import { statusUserListAll } from '@/services/dominioService.js';
-import { usuario } from '@/model/usuario.js';
+import { usuarioDto } from '@/dto/usuarioDto.js';
 export default{
     props:{
-        tipo: String,
-        isDialog: Boolean,
-        dialog: Object,
+        pTipo: String,
+        pIsDialog: Boolean,
+        pDialog: Object,
         pUsuario: Object
     },
     data: () => ({
         title:'',
         isSignIn: false,
         valid: false,
-        usuario:usuario,
+        usuario:usuarioDto,
         passwordConfirm:'',
         loading: false,
         showSenha: false,
@@ -153,7 +153,7 @@ export default{
          this.usuario = Object.assign({}, this.pUsuario);
        }
       
-        if(this.tipo=='signin'){
+        if(this.pTipo=='signin'){
             this.title='Sign In';
             this.isSignIn = true;
         }else{
@@ -186,8 +186,8 @@ export default{
             createUser(this.usuario)
                 .then(() => {
                     this.$swal('Sucesso!','O seu usuário foi criado!','success');
-                    if(this.isDialog){
-                      this.dialog.value = false;
+                    if(this.pIsDialog){
+                      this.pDialog.value = false;
                     }else{
                       this.$router.push({name: 'login'});
                     }
@@ -205,8 +205,8 @@ export default{
             updateUser(this.usuario)
                 .then(() => {
                     this.$swal('Sucesso!','O seu usuário foi alterado!','success');
-                    if(this.isDialog){
-                      this.dialog.value = false;
+                    if(this.pIsDialog){
+                      this.pDialog.value = false;
                     }
                 })
                 .catch(error => {

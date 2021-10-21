@@ -2,6 +2,7 @@
   <v-app>
 
     <BarraDrawer v-if="usuarioEstaLogado"></BarraDrawer>
+    <BarraNavegacaoTopo v-if="usuarioEstaLogado"></BarraNavegacaoTopo>
 
     <!-- Sizes your content based upon application components -->
     <v-main>
@@ -22,14 +23,21 @@
 
 <script>
 import BarraDrawer from '@/components/barraNavegacao/BarraDrawer';
+import BarraNavegacaoTopo from '@/components/barraNavegacao/BarraNavegacaoTopo';
 import { mapGetters } from 'vuex'
 
 export default{
   components:{
-    BarraDrawer
+    BarraDrawer,
+    BarraNavegacaoTopo
   },
   computed:{
       ...mapGetters(['usuarioEstaLogado'])
+  },
+  data () {
+      return {
+        
+      }
   }
 }
 </script>
