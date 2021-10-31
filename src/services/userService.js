@@ -2,7 +2,7 @@ import Http from '@/http'
 import { userStatusDto } from '@/dto/userStatusDto.js'
 
 export const create = (usuario) => {
-    return Http.post('auth/signIn', usuario);
+    return Http.post('auth/signUp', usuario);
 };
 
 export const update = (usuario) => {
@@ -31,14 +31,12 @@ export const getAllPage = (options, pFiltro) => {
     c_options = c_options + '&linesPerPage='+options?.itemsPerPage;
     c_options = c_options + '&direction='+direction;
     c_options = c_options + '&orderBy='+orderBy;
-    console.log(c_options);
     
     if(!pFiltro?.status){
         pFiltro.status = userStatusDto;
     }
 
     let filtro = Object.assign({}, pFiltro);
-    console.log(filtro);
     //exemplo: ?linesPerPage=2&page=0&direction=ASC&orderBy=name
     return Http.post('user/page' + c_options, filtro);
 }

@@ -2,12 +2,19 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Dasboard from '../views/Dashboard.vue'
 import Login from '@/views/Login'
-
 import { store } from '@/store'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/',
+    name: 'default',
+    component: Login,
+    meta: {
+      publica: true
+    }
+  },
   {
     path: '/login',
     name: 'login',
@@ -55,7 +62,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach( (routeTo, routeFrom, next) => {
-  if(!routeTo.meta.publica && !store.state.auth.token){
+  if(!routeTo.meta.publica && !store.getters.usuarioEstaLogado){
     return next({ name: 'login'});
   }
   next();

@@ -11,7 +11,6 @@ const http = axios.create({
 
 http.interceptors.request.use(
     function(config){
-        console.log(config);
         const token = store.state.token;
         if(token){
             config.headers.Authorization = `Bearer ${token}`;
@@ -28,14 +27,20 @@ http.interceptors.response.use(
         return response;
     },
     function(error){
-        console.log(error);
         const erro = {
             error,
             msgErro:'Ocorreu um imprevisto. Favor tentar mais tarde.'
         }
+        console.log(error.response.data);
         if(error&&error.response&&error.response.data){
-            if(error.response.data.showMessage){
-                erro.msgErro = error.response.data.dsBusinessErroMessage
+            erro.msgErro = error.response.data.msg + '<br/>';
+
+            if(Array.isArray(error.response.data.errors)){
+                error.response.data.errors.forEach(function(objErro) {
+                    erro.msgErro = erro.msgErro + '<br/> - ' + objErro.message;
+                })
+            }else{
+                erro.msgErro = erro.msgErro + '<br/> - ' + error.response.data.errors.message;
             }
         }
         return Promise.reject(erro);

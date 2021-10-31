@@ -9,10 +9,12 @@ const mutations = {
     DEFINIR_USUARIO_LOGADO (state, { token, usuario }){
         state.usuario = usuario;
         state.token = token;
+        //localStorage.setItem('token', token);
     },
     DESLOGAR_USUARIO (state){
         state.token = null;
         state.usuario = {};
+        //localStorage.setItem('token', '');
     }
 }
 
@@ -28,8 +30,6 @@ const actions = {
                     resolve(response.data);
                 })
                 .catch(err =>{
-                    console.log('Erro: ');
-                    console.log(err);
                     reject(err);
                 });
         });

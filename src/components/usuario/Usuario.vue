@@ -148,7 +148,6 @@ export default{
       this.listarStatusUser();
 
        if(this.pUsuario){
-         console.log(this.pUsuario);
          this.usuario = this.pUsuario;
          this.usuario = Object.assign({}, this.pUsuario);
        }
@@ -204,10 +203,10 @@ export default{
             //this.$http.post('auth/signIn',this.usuario)
             updateUser(this.usuario)
                 .then(() => {
-                    this.$swal('Sucesso!','O seu usuário foi alterado!','success');
-                    if(this.pIsDialog){
-                      this.pDialog.value = false;
-                    }
+                    this.$swal('Sucesso!','O seu usuário foi alterado!','success')
+                      .then(function(){
+                          window.location.reload();
+                      });
                 })
                 .catch(error => {
                   this.$swal('Ops!',error.msgErro,'error');
