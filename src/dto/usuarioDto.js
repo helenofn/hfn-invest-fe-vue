@@ -5,5 +5,6 @@ export const usuarioDto = {
     name:'Heleno Freitas Neto',
     email: 'heleno.freitas@gmail.com',
     password: '12345678',
-    status: userStatusDto
+    status: userStatusDto,
+    roles:[]
 }

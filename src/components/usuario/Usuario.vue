@@ -70,6 +70,17 @@
                     
                     </v-combobox>
                 </v-col>
+                <v-col cols="12" md="12" v-if="!isSignIn">
+                  <v-select
+                    v-model="usuario.roles"
+                    :items="roles"
+                    item-text="name"
+                    label="Roles"
+                    multiple
+                    chips
+                    return-object
+                  ></v-select>
+                </v-col>
             </v-row>
         </v-container>
       </v-form>
@@ -114,7 +125,7 @@
 
 <script>
 import { create as createUser, update as updateUser } from '@/services/userService.js';
-import { statusUserListAll } from '@/services/dominioService.js';
+import { statusUserListAll, roleUserListAll } from '@/services/dominioService.js';
 import { usuarioDto } from '@/dto/usuarioDto.js';
 export default{
     props:{
@@ -138,14 +149,13 @@ export default{
             senhaMax: v => v.length <= 16 || 'Max 16 caracteres',
             email: v => /.+@.+/.test(v) || 'Informe um e-mail válido'
         },
-        userStatusList:[
-          'Ativo',
-          'Inativo'
-        ]
+        userStatusList:[],
+        roles:[]
     }),
 
     created(){
       this.listarStatusUser();
+      this.listarRoles();
 
        if(this.pUsuario){
          this.usuario = this.pUsuario;
@@ -171,10 +181,13 @@ export default{
       listarStatusUser(){
         statusUserListAll()
         .then((response)=>{
-          console.log(response.data);
           this.userStatusList = response.data;
-        }).catch(error => {
-          console.log(error);
+        });
+      },
+      listarRoles(){
+        roleUserListAll()
+        .then((response) => {
+          this.roles = response.data;
         });
       },
       salvar () {

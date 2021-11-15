@@ -24,7 +24,7 @@
 <script>
 import BarraDrawer from '@/components/barraNavegacao/BarraDrawer';
 import BarraNavegacaoTopo from '@/components/barraNavegacao/BarraNavegacaoTopo';
-import { mapGetters } from 'vuex'
+//import { mapGetters } from 'vuex'
 
 export default{
   components:{
@@ -32,7 +32,10 @@ export default{
     BarraNavegacaoTopo
   },
   computed:{
-      ...mapGetters(['usuarioEstaLogado'])
+    usuarioEstaLogado(){
+      return this.$store.getters.usuarioEstaLogado;
+    }
+      //...mapGetters(['usuarioEstaLogado'])
   },
   data () {
       return {

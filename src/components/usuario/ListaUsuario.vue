@@ -64,59 +64,64 @@
           
         </v-list-item-content>
       </v-list-item>
+      <v-divider class="mx-4"></v-divider>
+      <v-list-item>
+        <v-list-item-content>
+        
+          <v-data-table
+            :headers="headers"
+            :items="usuarios"
+            :page.sync="page"
+            :options.sync="options"
+            :server-items-length="total"
+            :loading="loading"
+            @page-count="pageCount = $event"
+            class="elevation-1"
+          >
+            <template v-slot:item.actions="{ item }">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    mdi-pencil
+                  </v-icon>
+                </template>
+                <span>Editar usuário</span>
+              </v-tooltip>
+              <v-tooltip bottom v-if="item.status.code==1">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon small @click="ativarInativarItem(item)" v-bind="attrs" v-on="on">
+                    mdi-close-circle-outline
+                  </v-icon>
+                </template>
+                <span>Inativar usuário</span>
+              </v-tooltip>
+              <v-tooltip bottom v-if="item.status.code==2">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon v-if="item.status.code==2" small @click="ativarInativarItem(item)" v-bind="attrs" v-on="on">
+                    mdi-restart
+                  </v-icon>
+                </template>
+                <span>Ativar usuário</span>
+              </v-tooltip>
+            </template>
+          </v-data-table>
+          <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+            ></v-pagination>
+          </div>
 
-      
+        </v-list-item-content>
+      </v-list-item>
     </v-card>
 
-    <v-data-table
-      :headers="headers"
-      :items="usuarios"
-      :page.sync="page"
-      :options.sync="options"
-      :server-items-length="total"
-      :loading="loading"
-      @page-count="pageCount = $event"
-      class="elevation-1"
-    >
-      <template v-slot:item.actions="{ item }">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon
-              small
-              class="mr-2"
-              @click="editItem(item)"
-              v-bind="attrs"
-              v-on="on"
-            >
-              mdi-pencil
-            </v-icon>
-          </template>
-          <span>Editar usuário</span>
-        </v-tooltip>
-        <v-tooltip bottom v-if="item.status.code==1">
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon small @click="ativarInativarItem(item)" v-bind="attrs" v-on="on">
-              mdi-close-circle-outline
-            </v-icon>
-          </template>
-          <span>Inativar usuário</span>
-        </v-tooltip>
-        <v-tooltip bottom v-if="item.status.code==2">
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon v-if="item.status.code==2" small @click="ativarInativarItem(item)" v-bind="attrs" v-on="on">
-              mdi-restart
-            </v-icon>
-          </template>
-          <span>Ativar usuário</span>
-        </v-tooltip>
-      </template>
-    </v-data-table>
-    <div class="text-center pt-2">
-      <v-pagination
-        v-model="page"
-        :length="pageCount"
-      ></v-pagination>
-    </div>
     <v-dialog
       v-model="userDialog.value"
       max-width="500px"
