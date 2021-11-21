@@ -11,6 +11,7 @@ const http = axios.create({
 
 http.interceptors.request.use(
     function(config){
+        store.dispatch('addRequestSend');
         const token = store.state.token;
         if(token){
             config.headers.Authorization = `Bearer ${token}`;
@@ -24,9 +25,11 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
     function(response){
+        store.dispatch('removeRequestSend');
         return response;
     },
     function(error){
+        store.dispatch('removeRequestSend');
         const erro = {
             error,
             msgErro:'Ocorreu um imprevisto. Favor tentar mais tarde.'

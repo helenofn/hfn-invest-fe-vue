@@ -1,6 +1,7 @@
  <template>
   <v-app>
 
+    <Loading></Loading>
     <BarraDrawer v-if="usuarioEstaLogado"></BarraDrawer>
     <BarraNavegacaoTopo v-if="usuarioEstaLogado"></BarraNavegacaoTopo>
 
@@ -24,12 +25,14 @@
 <script>
 import BarraDrawer from '@/components/barraNavegacao/BarraDrawer';
 import BarraNavegacaoTopo from '@/components/barraNavegacao/BarraNavegacaoTopo';
+import Loading from '@/components/loading/Loading.vue';
 //import { mapGetters } from 'vuex'
 
 export default{
   components:{
     BarraDrawer,
-    BarraNavegacaoTopo
+    BarraNavegacaoTopo,
+    Loading
   },
   computed:{
     usuarioEstaLogado(){

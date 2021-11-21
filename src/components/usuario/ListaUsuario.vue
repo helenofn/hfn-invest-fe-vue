@@ -1,23 +1,12 @@
 <template>
   <div>
-    <v-card
-      class="mx-auto mb-2"
-    >
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="text-h5">
-            Usuários
-          </v-list-item-title>
-          <v-list-item-subtitle>Cadastro de usuários</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider class="mx-4"></v-divider>
-      <v-list-item>
+    <PainelDrawer :p-options="painelOptions">
+     <v-list-item>
         <v-list-item-content>
           <v-form ref="form" lazy-validation>
             <v-container>
               <v-row>
-                <v-col cols="12" md="4">
+                <v-col cols="12" sm="12">
                     <v-text-field
                       v-model="filtro.name"
                       counter
@@ -30,7 +19,7 @@
                     ></v-text-field>
 
                 </v-col>
-                <v-col cols="12" md="4">
+                <v-col cols="12" sm="12">
                   <v-text-field
                     v-model="filtro.email"
                     counter
@@ -42,7 +31,7 @@
                     @change="pesquisar"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" md="4">
+                <v-col cols="12" sm="12">
                   <v-combobox
                     v-model="filtro.status"
                     :items="userStatusList"
@@ -60,11 +49,34 @@
               </v-row>
             </v-container>
           </v-form>
-          
-          
         </v-list-item-content>
       </v-list-item>
-      <v-divider class="mx-4"></v-divider>
+       
+    </PainelDrawer>
+
+
+
+
+    <v-card
+      class="mx-auto mb-2"
+    >
+
+    <v-btn class="hfn-btn-filter"
+      small
+      @click="painelOptions.isActive=true"
+    >     
+      <v-icon smal>mdi-filter-outline</v-icon>
+    </v-btn>
+
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title class="text-h5">
+            Usuários
+          </v-list-item-title>
+          <v-list-item-subtitle>Cadastro de usuários</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+
       <v-list-item>
         <v-list-item-content>
         
@@ -137,9 +149,11 @@ import { getAllPage as getAllPageUsers, update as updateUser } from '@/services/
 import { usuarioDto } from '@/dto/usuarioDto.js';
 import { statusUserListAll } from '@/services/dominioService.js';
 import UserStatusEnum from '@/enums/UserStatusEnum.js';
+import PainelDrawer from '@/components/painel/PainelDrawer.vue';
 
   export default {
     components:{
+        PainelDrawer,
         Usuario
     },
     data: () => ({
@@ -164,10 +178,12 @@ import UserStatusEnum from '@/enums/UserStatusEnum.js';
         },
         { text: 'E-mail', value: 'email' },
         { text: 'Situação', value: 'status.name' },
+        { text: 'Roles', value: 'roles[0].name' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       usuarios: [],
-      v_pesquisarSetTimeOut:null
+      v_pesquisarSetTimeOut:null,
+      painelOptions:{isActive:false}
     }),
 
     computed: {
@@ -254,3 +270,10 @@ import UserStatusEnum from '@/enums/UserStatusEnum.js';
     },
   }
 </script>
+
+<style scoped>
+  .hfn-btn-filter{
+    float: right;
+    margin: 10px;
+  }
+</style>

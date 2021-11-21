@@ -67,7 +67,6 @@
                       item-text="name"
                       return-object
                     >
-                    
                     </v-combobox>
                 </v-col>
                 <v-col cols="12" md="12" v-if="!isSignIn">

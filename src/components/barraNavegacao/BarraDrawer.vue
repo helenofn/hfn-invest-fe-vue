@@ -91,7 +91,7 @@ import { mapGetters } from 'vuex'
       return {
         itensCadastro: [
             ['Usuário', 'mdi-account', 'cadastroUsuario'],
-            ['Categoria de ativo', 'mdi-cog', ''],
+            ['Categoria de ativo', 'mdi-cog', 'cadastroCategoriaAtivoFinanceiro'],
             ['Empresa', 'mdi-office-building', ''],
             ['Ativo financeiro', 'mdi-finance', '']
         ],
