@@ -270,10 +270,3 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
     },
   }
 </script>
-
-<style scoped>
-  .hfn-btn-filter{
-    float: right;
-    margin: 10px;
-  }
-</style>

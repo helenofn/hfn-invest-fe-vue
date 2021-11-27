@@ -4,6 +4,7 @@ import vuetify from './plugins/vuetify'
 import router from './router'
 import { store } from './store'
 import http from '@/http';
+import '@/assets/css/hfn-invest.css';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
