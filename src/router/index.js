@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Dasboard from '../views/Dashboard.vue'
+import Dasboard from '@/views/Dashboard.vue'
+import ErroPage from '@/views/erros/ErroPage.vue'
 import Login from '@/views/Login'
 import { store } from '@/store'
 
@@ -24,6 +25,17 @@ const routes = [
     }
   },
   {
+    path: '/Error',
+    name: 'error',
+    component: ErroPage,
+    meta: {
+      publica: true
+    },
+    props: {
+      pTipo: ''
+    }
+  },
+  {
     path: '/dashboard',
     name: 'dashboard',
     component: Dasboard,
@@ -39,7 +51,8 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/MovimentacoesBancarias.vue'),
     meta: {
-      publica: false
+      publica: false,
+      roles: ['ADM']
     }
   },
   {
@@ -50,7 +63,8 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/cadastro/CadastroUsuario.vue'),
     meta: {
-      publica: false
+      publica: false,
+      roles: ['ADM']
     }
   },
   {
@@ -58,7 +72,8 @@ const routes = [
     name: 'cadastroCategoriaAtivoFinanceiro',
     component: () => import(/* webpackChunkName: "about" */ '../views/cadastro/CadastroCategoriaAtivoFinanceiro.vue'),
     meta: {
-      publica: false
+      publica: false,
+      roles: ['ADM']
     }
   }
 ]
@@ -70,8 +85,31 @@ const router = new VueRouter({
 })
 
 router.beforeEach( (routeTo, routeFrom, next) => {
-  if(!routeTo.meta.publica && !store.getters.usuarioEstaLogado){
-    return next({ name: 'login'});
+  if(!routeTo.meta.publica){
+
+    if(!store.getters.usuarioEstaLogado){
+      return next({ name: 'login'});
+    }else{
+      //TODO verifica se uma das roles do usuário existem nas roles da rota, caso não, redirecionar para a pagina de erro com status Não autorizado
+      let userRoles = store.getters.usuario.roles;
+      if(routeTo.meta && routeTo.meta.roles){
+        routeTo.meta.roles.forEach(rotaRole => {
+          if(userRoles){
+            userRoles?.forEach(objUserRole => {
+              if(objUserRole.name == rotaRole){
+                next();
+              }
+            });
+          }
+        });
+        return next({ 
+          name: 'error', 
+          params: {
+            pTipo: 'NAO_AUTORIZADO'
+          } 
+        });  
+      }
+    }
   }
   next();
 });

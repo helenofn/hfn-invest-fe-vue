@@ -38,7 +38,8 @@ const actions = {
 
 const getters = {
     usuarioEstaLogado: state => Boolean(state.token),
-    token: state => state.token
+    token: state => state.token,
+    usuario: state => state.usuario
 }
 
 export default {
