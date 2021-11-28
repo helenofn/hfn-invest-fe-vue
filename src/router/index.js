@@ -90,24 +90,30 @@ router.beforeEach( (routeTo, routeFrom, next) => {
     if(!store.getters.usuarioEstaLogado){
       return next({ name: 'login'});
     }else{
-      //TODO verifica se uma das roles do usuário existem nas roles da rota, caso não, redirecionar para a pagina de erro com status Não autorizado
       let userRoles = store.getters.usuario.roles;
       if(routeTo.meta && routeTo.meta.roles){
+        let usuarioHasHole = false;
         routeTo.meta.roles.forEach(rotaRole => {
+          console.log(rotaRole);
           if(userRoles){
-            userRoles?.forEach(objUserRole => {
+            userRoles.forEach(objUserRole => {
+              console.log(objUserRole.name);
               if(objUserRole.name == rotaRole){
+                usuarioHasHole = true;
                 next();
+                return;
               }
             });
           }
         });
-        return next({ 
-          name: 'error', 
-          params: {
-            pTipo: 'NAO_AUTORIZADO'
-          } 
-        });  
+        if(!usuarioHasHole){
+          return next({ 
+            name: 'error', 
+            params: {
+              pTipo: 'NAO_AUTORIZADO'
+            } 
+          });
+        }
       }
     }
   }
