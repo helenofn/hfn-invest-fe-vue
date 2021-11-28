@@ -178,7 +178,7 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
         },
         { text: 'E-mail', value: 'email' },
         { text: 'Situação', value: 'status.name' },
-        { text: 'Roles', value: 'roles[0].name' },
+        { text: 'Roles', value: 'roles' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       usuarios: [],
@@ -238,7 +238,8 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
         this.loading=true;
         getAllPageUsers(this.options, this.filtro)
           .then(response =>{
-            this.usuarios = response.data.content;
+            //this.usuarios = response.data.content;
+            this.montarUsuarios(response.data.content);
             this.total = response.data.totalElements;
             this.pageCount = response.data.totalPages;
             this.loading = false;
@@ -266,6 +267,27 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
           console.log(error);
         });
       },
+      montarUsuarios(usuariosApi){
+        this.usuarios = [];
+        usuariosApi.forEach(usuarioApi => {
+          let usuario = {
+            name: usuarioApi.name,
+            email: usuarioApi.email,
+            status: usuarioApi.status,
+            roles: this.montarStringRoles(usuarioApi.roles),
+          }
+          this.usuarios.push(usuario);
+        });
+      },
+      montarStringRoles(roles){
+        let strRole = '';
+        if(roles){
+          roles.forEach(role => {
+            strRole = strRole + role.name + ', ';
+          });
+        }
+        return strRole.substring(0, strRole.length - 2);
+      }
       
     },
   }

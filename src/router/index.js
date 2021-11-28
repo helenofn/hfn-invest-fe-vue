@@ -94,10 +94,8 @@ router.beforeEach( (routeTo, routeFrom, next) => {
       if(routeTo.meta && routeTo.meta.roles){
         let usuarioHasHole = false;
         routeTo.meta.roles.forEach(rotaRole => {
-          console.log(rotaRole);
           if(userRoles){
             userRoles.forEach(objUserRole => {
-              console.log(objUserRole.name);
               if(objUserRole.name == rotaRole){
                 usuarioHasHole = true;
                 next();

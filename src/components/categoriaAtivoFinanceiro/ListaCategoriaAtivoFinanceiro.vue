@@ -83,9 +83,8 @@ export default{
         },
         salvar(categoriaForm){
             let cat = {...categoriaForm};
-            console.log(cat);
-            categoriaSave(cat).then((response) =>{
-                console.log(response.data);
+            categoriaSave(cat).then(() =>{
+                this.$swal('Sucesso!','Categoria salva com sucesso!','success');
             })
             .catch((error) => {
                 this.$swal('Ops!',error.msgErro,'error');
