@@ -212,7 +212,7 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
     methods: {
 
       editItem (item) {
-        this.usuario = item;
+        this.usuario = item.usuarioApi;
         this.userDialog.value = true
       },
 
@@ -275,6 +275,7 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
             email: usuarioApi.email,
             status: usuarioApi.status,
             roles: this.montarStringRoles(usuarioApi.roles),
+            usuarioApi: usuarioApi
           }
           this.usuarios.push(usuario);
         });
