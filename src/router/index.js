@@ -25,7 +25,7 @@ const routes = [
     }
   },
   {
-    path: '/Error',
+    path: '/error',
     name: 'error',
     component: ErroPage,
     meta: {
@@ -62,15 +62,6 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/cadastro/CadastroUsuario.vue'),
-    meta: {
-      publica: false,
-      roles: ['ADM']
-    }
-  },
-  {
-    path: '/cadastro-categoria-ativo-financeiro',
-    name: 'cadastroCategoriaAtivoFinanceiro',
-    component: () => import(/* webpackChunkName: "about" */ '../views/cadastro/CadastroCategoriaAtivoFinanceiro.vue'),
     meta: {
       publica: false,
       roles: ['ADM']
