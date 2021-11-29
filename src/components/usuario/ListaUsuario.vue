@@ -217,11 +217,12 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
       },
 
       ativarInativarItem(item){
-        item.status = item?.status?.code == UserStatusEnum.ATIVO.code ? UserStatusEnum.INATIVO : UserStatusEnum.ATIVO;
-        let message = item?.status?.code==UserStatusEnum.ATIVO.code ? 'ativado':'inativado'
-        updateUser(item)
+        let itemApi = item.usuarioApi;
+        itemApi.status = itemApi?.status?.code == UserStatusEnum.ATIVO.code ? UserStatusEnum.INATIVO : UserStatusEnum.ATIVO;
+        let message = itemApi?.status?.code==UserStatusEnum.ATIVO.code ? 'ativado':'inativado'
+        updateUser(itemApi)
         .then(() => {
-            this.$swal('Sucesso!','O seu usuário foi '+message+'!','success')
+            this.$swal('Sucesso!','O usuário foi '+message+'!','success')
         })
         .catch(error => {
           this.$swal('Ops!',error.msgErro,'error');

@@ -196,7 +196,7 @@ export default{
             //this.$http.post('auth/signIn',this.usuario)
             createUser(this.usuario)
                 .then(() => {
-                    this.$swal('Sucesso!','O seu usuário foi criado!','success');
+                    this.$swal('Sucesso!','O usuário foi criado!','success');
                     if(this.pIsDialog){
                       this.pDialog.value = false;
                     }else{
