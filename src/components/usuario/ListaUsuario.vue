@@ -33,15 +33,15 @@
                 </v-col>
                 <v-col cols="12" sm="12">
                   <v-combobox
-                    v-model="filtro.status"
                     :items="userStatusList"
                     label="Situação"
+                    clearable
                     item-text="name"
+                    item-value="name"
                     counter
                     hint=""
-                    return-object
                     dense
-                    @change="pesquisar"
+                    @change="filtro.statusCode = $event?$event.code:null; pesquisar()"
                   >          
                   </v-combobox>
                 </v-col>
@@ -105,7 +105,7 @@
                 </template>
                 <span>Editar usuário</span>
               </v-tooltip>
-              <v-tooltip bottom v-if="item.status.code==1">
+              <v-tooltip bottom v-if="item.statusCode==1">
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon small @click="ativarInativarItem(item)" v-bind="attrs" v-on="on">
                     mdi-close-circle-outline
@@ -113,9 +113,9 @@
                 </template>
                 <span>Inativar usuário</span>
               </v-tooltip>
-              <v-tooltip bottom v-if="item.status.code==2">
+              <v-tooltip bottom v-if="item.statusCode==2">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-icon v-if="item.status.code==2" small @click="ativarInativarItem(item)" v-bind="attrs" v-on="on">
+                  <v-icon v-if="item.statusCode==2" small @click="ativarInativarItem(item)" v-bind="attrs" v-on="on">
                     mdi-restart
                   </v-icon>
                 </template>
@@ -146,7 +146,7 @@
 <script>
 import Usuario from '@/components/usuario/Usuario.vue'
 import { getAllPage as getAllPageUsers, update as updateUser } from '@/services/userService.js';
-import { usuarioDto } from '@/dto/usuarioDto.js';
+import { usuarioRequestDto, filterUserRequestDto } from '@/dto/usuarioDto.js';
 import { statusUserListAll } from '@/services/dominioService.js';
 import UserStatusEnum from '@/enums/UserStatusEnum.js';
 import PainelDrawer from '@/components/painel/PainelDrawer.vue';
@@ -157,14 +157,14 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
         Usuario
     },
     data: () => ({
-      filtro: usuarioDto,
+      filtro: {...filterUserRequestDto},
       userStatusList: [],
       page: 1,
       pageCount: 0,
       total:0,
       loading:true,
       options:{},
-      usuario:usuarioDto,
+      usuario: {...usuarioRequestDto},
       userDialog: {
         value:false
       },
@@ -177,7 +177,7 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
           value: 'name',
         },
         { text: 'E-mail', value: 'email' },
-        { text: 'Situação', value: 'status.name' },
+        { text: 'Situação', value: 'statusName' },
         { text: 'Roles', value: 'roles' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
@@ -218,11 +218,12 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
 
       ativarInativarItem(item){
         let itemApi = item.usuarioApi;
-        itemApi.status = itemApi?.status?.code == UserStatusEnum.ATIVO.code ? UserStatusEnum.INATIVO : UserStatusEnum.ATIVO;
-        let message = itemApi?.status?.code==UserStatusEnum.ATIVO.code ? 'ativado':'inativado'
+        itemApi.statusCode = itemApi?.statusCode == UserStatusEnum.ATIVO.code ? UserStatusEnum.INATIVO.code : UserStatusEnum.ATIVO.code;
+        let message = itemApi?.statusCode==UserStatusEnum.ATIVO.code ? 'ativado':'inativado'
         updateUser(itemApi)
         .then(() => {
             this.$swal('Sucesso!','O usuário foi '+message+'!','success')
+            this.getDataFromApi();
         })
         .catch(error => {
           this.$swal('Ops!',error.msgErro,'error');
@@ -258,7 +259,7 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
         this.getDataFromApi();
       },
       limpar(){
-        this.filtro = usuarioDto;
+        this.filtro = usuarioRequestDto;
       },
       listarStatusUser(){
         statusUserListAll()
@@ -274,7 +275,8 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
           let usuario = {
             name: usuarioApi.name,
             email: usuarioApi.email,
-            status: usuarioApi.status,
+            statusCode: usuarioApi.statusCode,
+            statusName: usuarioApi.statusName,
             roles: this.montarStringRoles(usuarioApi.roles),
             usuarioApi: usuarioApi
           }

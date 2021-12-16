@@ -61,11 +61,12 @@
                 
                 <v-col cols="12" md="12" v-if="!isSignIn">
                     <v-combobox
-                      v-model="usuario.status"
+                      v-model="usuario.statusName"
                       :items="userStatusList"
                       label="Situação"
                       item-text="name"
-                      return-object
+                      item-value="name"
+                      @change="usuario.statusCode = $event?$event.code:null; usuario.statusName = $event?$event.name:null"
                     >
                     </v-combobox>
                 </v-col>
@@ -125,7 +126,7 @@
 <script>
 import { create as createUser, update as updateUser } from '@/services/userService.js';
 import { statusUserListAll, roleUserListAll } from '@/services/dominioService.js';
-import { usuarioDto } from '@/dto/usuarioDto.js';
+import { usuarioRequestDto } from '@/dto/usuarioDto.js';
 export default{
     props:{
         pTipo: String,
@@ -137,7 +138,7 @@ export default{
         title:'',
         isSignIn: false,
         valid: false,
-        usuario:usuarioDto,
+        usuario:{...usuarioRequestDto},
         passwordConfirm:'',
         loading: false,
         showSenha: false,
