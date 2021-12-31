@@ -3,14 +3,21 @@ import router from '@/router';
 
 const estado = {
     token: null,
-    usuario: {}
+    usuario: {},
+    isAdm: false
 }
 
 const mutations = {
     DEFINIR_USUARIO_LOGADO (state, { token, usuario }){
+        //localStorage.setItem('token', token);
         state.usuario = usuario;
         state.token = token;
-        //localStorage.setItem('token', token);
+        state.isAdm = false;
+        usuario.roles.map(role => {
+            if(role.name=='ADM'){
+                state.isAdm = true;
+            }
+        });        
     },
     DESLOGAR_USUARIO (state){
         state.token = null;
@@ -47,7 +54,8 @@ const actions = {
 const getters = {
     usuarioEstaLogado: state => Boolean(state.token),
     token: state => state.token,
-    usuario: state => state.usuario
+    usuario: state => state.usuario,
+    isAdm: state => state.isAdm
 }
 
 export default {

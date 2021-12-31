@@ -15,9 +15,9 @@
             </v-list-item-content>
         </v-list-item>
 
-        <v-divider></v-divider>
+        <v-divider v-if="isAdm"></v-divider>
 
-        <v-list
+        <v-list v-if="isAdm"
             dense
             nav
         >
@@ -89,25 +89,49 @@ import { mapGetters } from 'vuex'
   export default {
     data () {
       return {
-        itensCadastro: [
-            ['Usuário', 'mdi-account', 'cadastroUsuario'],
-            ['Empresa', 'mdi-office-building', ''],
-            ['Ativo financeiro', 'mdi-finance', '']
-        ],
-        itensComum: [
-          ['Dashboards', 'mdi-view-dashboard', 'dashboard'],
-          ['Movimentações', 'mdi-bank-transfer', 'movimentacoes'],
-          ['Corretora', 'mdi-office-building', '' ],
-          ['Transações', 'mdi-cash-multiple', '' ]
-        ],
+        itensCadastro: [],
+        itensComum: [],
         right: null,
-        usuario: store.state.auth.usuario
+        //usuario: store.state.auth.usuario
       }
     },
     computed:{
-      ...mapGetters(['getMenuIsOpen'])
+        ...mapGetters(['getMenuIsOpen']),
+        usuario(){
+            return store.state.auth.usuario
+            //return this.$store.getters.usuario
+        },
+        isAdm(){
+            return store.state.auth.isAdm
+        }
+    },
+    created(){
+        this.construirMenuPorRole();
     },
     methods:{
+        construirMenuPorRole(){
+            this.usuario.roles.map(role=>{
+                if(role.name=='ADM'){
+                    this.construirMenuAdm();
+                }
+                if(role.name=='COMMON'){
+                    this.construirMenuCommon();
+                }
+            });
+        },
+        construirMenuAdm(){
+            this.itensCadastro = [];
+            this.itensCadastro.push(['Usuário', 'mdi-account', 'cadastroUsuario']);
+            this.itensCadastro.push(['Empresa', 'mdi-office-building', '']);
+            this.itensCadastro.push(['Ativo financeiro', 'mdi-finance', '']);
+        },
+        construirMenuCommon(){
+            this.itensComum = [];
+            this.itensComum.push(['Dashboards', 'mdi-view-dashboard', 'dashboard']);
+            this.itensComum.push(['Movimentações', 'mdi-bank-transfer', 'movimentacoes']);
+            this.itensComum.push(['Corretora', 'mdi-office-building', '' ]);
+            this.itensComum.push(['Transações', 'mdi-cash-multiple', '' ]);
+        },
         direcionarPagina(routeName){
             this.closeMenu();
             this.$router.push({ name: routeName });
@@ -115,9 +139,6 @@ import { mapGetters } from 'vuex'
         closeMenu(){
             this.$store.dispatch('menuToogle', false);
         }
-    },
-    created: function () {
-        
-    } 
+    }
   }
 </script>
