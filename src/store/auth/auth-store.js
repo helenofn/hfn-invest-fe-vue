@@ -1,4 +1,5 @@
 import http from '@/http';
+import router from '@/router';
 
 const estado = {
     token: null,
@@ -32,6 +33,13 @@ const actions = {
                 .catch(err =>{
                     reject(err);
                 });
+        });
+    },
+    efetuarLogout({ commit }){
+        return new Promise((resolve) => {
+            commit('DESLOGAR_USUARIO');
+            router.push({name:'login'});
+            resolve();
         });
     }
 }
