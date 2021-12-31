@@ -40,7 +40,8 @@ const routes = [
     name: 'dashboard',
     component: Dasboard,
     meta: {
-      publica: false
+      publica: false,
+      roles: ['COMMON']
     }
   },
   {
@@ -52,7 +53,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/MovimentacoesBancarias.vue'),
     meta: {
       publica: false,
-      roles: ['ADM']
+      roles: ['COMMON']
     }
   },
   {
