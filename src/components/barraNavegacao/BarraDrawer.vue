@@ -122,7 +122,7 @@ import { mapGetters } from 'vuex'
         construirMenuAdm(){
             this.itensCadastro = [];
             this.itensCadastro.push(['Usuário', 'mdi-account', 'cadastroUsuario']);
-            this.itensCadastro.push(['Empresa', 'mdi-office-building', '']);
+            this.itensCadastro.push(['Corretora', 'mdi-office-building', 'cadastroCorretora']);
             this.itensCadastro.push(['Ativo financeiro', 'mdi-finance', '']);
         },
         construirMenuCommon(){

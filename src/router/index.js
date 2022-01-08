@@ -36,6 +36,30 @@ const routes = [
     }
   },
   {
+    path: '/cadastro-usuario',
+    name: 'cadastroUsuario',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/cadastro/CadastroUsuario.vue'),
+    meta: {
+      publica: false,
+      roles: ['ADM']
+    }
+  },
+  {
+    path: '/cadastro-corretora',
+    name: 'cadastroCorretora',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '@/views/cadastro/CadastroCorretora.vue'),
+    meta: {
+      publica: false,
+      roles: ['ADM']
+    }
+  },
+  {
     path: '/dashboard',
     name: 'dashboard',
     component: Dasboard,
@@ -54,18 +78,6 @@ const routes = [
     meta: {
       publica: false,
       roles: ['COMMON']
-    }
-  },
-  {
-    path: '/cadastro-usuario',
-    name: 'cadastroUsuario',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/cadastro/CadastroUsuario.vue'),
-    meta: {
-      publica: false,
-      roles: ['ADM']
     }
   }
 ]
