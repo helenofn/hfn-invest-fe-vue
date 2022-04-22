@@ -179,7 +179,7 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
         { text: 'E-mail', value: 'email' },
         { text: 'Situação', value: 'statusName' },
         { text: 'Roles', value: 'roles' },
-        { text: 'Actions', value: 'actions', sortable: false },
+        { text: 'Ações', value: 'actions', sortable: false },
       ],
       usuarios: [],
       v_pesquisarSetTimeOut:null,
@@ -248,6 +248,7 @@ import PainelDrawer from '@/components/painel/PainelDrawer.vue';
           })
           .catch(error =>{
             console.log(error);
+            this.loading = false;
           });
 
       },
